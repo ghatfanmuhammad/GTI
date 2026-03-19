@@ -6,7 +6,7 @@ void RenderScene(void)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // --- OBJEK 1: GARIS ---
+    // - OBJEK 1: GARIS -
     glPushMatrix();
         glLineWidth(2.0f);
         glBegin(GL_LINES);
@@ -16,7 +16,7 @@ void RenderScene(void)
         glEnd();
     glPopMatrix();
 
-    // --- OBJEK 2: TITIK ---
+    // - OBJEK 2: TITIK -
     glPushMatrix();
         glPointSize(5.0f);
         glTranslatef(0.35, 0.35, 0.0);
