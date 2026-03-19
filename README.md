@@ -1,1 +1,0 @@
-# Praktikumku-GTI-D1
