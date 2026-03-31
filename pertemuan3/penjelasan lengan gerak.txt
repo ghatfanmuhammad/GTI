@@ -1,0 +1,35 @@
+﻿Penjelasan Cara Kerja Lengan
+Program ini menggunakan konsep hierarchical modeling, yaitu setiap bagian lengan saling terhubung. Urutannya adalah bahu (shoulder), siku (elbow), telapak (palm), dan jari-jari. Jika bahu digerakkan maka semua bagian ikut bergerak, sedangkan jika siku atau telapak digerakkan hanya bagian setelahnya yang ikut.
+Pergerakan dilakukan dengan glTranslatef() untuk posisi dan glRotatef() untuk rotasi pada sendi. Bentuk lengan dibuat dari glutWireCube() yang diubah ukurannya dengan glScalef(). Fungsi glPushMatrix() dan glPopMatrix() digunakan agar setiap bagian bisa bergerak tanpa memengaruhi bagian lain.
+
+Alur Struktur Lengan
+* Shoulder (bahu) sebagai titik awal pergerakan
+* Elbow (siku) terhubung dengan bahu
+* Palm (telapak tangan) terhubung dengan siku
+* Fingers (jari-jari) terhubung dengan telapak tangan
+
+Fungsi Transformasi yang Digunakan
+* glTranslatef() → untuk mengatur posisi objek (perpindahan)
+* glRotatef() → untuk memberikan rotasi pada sendi
+* glScalef() → untuk mengubah ukuran objek agar menyerupai lengan
+* glPushMatrix() → menyimpan posisi transformasi saat ini
+* glPopMatrix() → mengembalikan posisi sebelumnya agar tidak memengaruhi objek lain
+	
+
+Kontrol Lengan
+* s → memutar bahu ke arah depan
+* S → memutar bahu ke arah belakang
+* e → menekuk siku
+* E → meluruskan siku
+* p → memutar telapak tangan
+* P → memutar telapak ke arah sebaliknya
+
+Kontrol Jari
+* t / T → menggerakkan ibu jari
+* i / I → menggerakkan jari telunjuk
+* m / M → menggerakkan jari tengah
+* r / R → menggerakkan jari manis
+* k / K → menggerakkan jari kelingking
+	Keterangan:
+* Huruf kecil → rotasi bertambah (gerak maju)
+* Huruf besar → rotasi berkurang (gerak mundur)
