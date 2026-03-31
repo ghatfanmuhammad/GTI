@@ -1,116 +1,307 @@
-#include <gl/glut.h>
-#include <gl/gl.h>
+#include <GL/glut.h>
 #include <math.h>
+#include <string.h>
 
-#define PI 3.1415926535898
+// ================= TEXT =================
+void tulisTeks(float x, float y, const char* teks) {
+    glRasterPos2f(x, y);
+    for (int i = 0; i < strlen(teks); i++) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, teks[i]);
+    }
+}
 
-// Fungsi untuk membuat lingkaran yang halus dengan banyak titik [cite: 108-115]
-void drawCircle(float x, float y, float radius, int segments = 100) {
+// ================= LINGKARAN =================
+void lingkaran(float x, float y, float r) {
     glBegin(GL_POLYGON);
-    for (int i = 0; i < segments; i++) {
-        float angle = 2 * PI * i / segments;
-        glVertex2f(x + cos(angle) * radius, y + sin(angle) * radius);
+    for (int i = 0; i < 100; i++) {
+        float sudut = 2 * 3.1416 * i / 100;
+        glVertex2f(x + r * cos(sudut), y + r * sin(sudut));
     }
     glEnd();
 }
 
-void RenderScene(void) {
+// ================= POHON =================
+void pohon() {
+    // Batang
+    glColor3f(0.4, 0.2, 0.1);
+    glBegin(GL_POLYGON);
+        glVertex2f(-0.015, -0.1);
+        glVertex2f(0.015, -0.1);
+        glVertex2f(0.015, 0.25);
+        glVertex2f(-0.015, 0.25);
+    glEnd();
+
+    // Daun
+    glColor3f(0.0, 0.6, 0.0);
+    lingkaran(0, 0.35, 0.1);
+    lingkaran(-0.06, 0.28, 0.08);
+    lingkaran(0.06, 0.28, 0.08);
+}
+
+// ================= GEDUNG DETAIL =================
+void gedung(float x, float r, float g, float b, const char* label) {
+    glPushMatrix();
+    glTranslatef(x, 0, 0);
+
+    // Body
+    glColor3f(r, g, b);
+    glBegin(GL_POLYGON);
+        glVertex2f(-0.3, -0.3);
+        glVertex2f(0.3, -0.3);
+        glVertex2f(0.3, 0.6);
+        glVertex2f(-0.3, 0.6);
+    glEnd();
+
+    // Atap
+    glColor3f(r - 0.1, g - 0.1, b - 0.1);
+    glBegin(GL_POLYGON);
+        glVertex2f(-0.3, 0.6);
+        glVertex2f(0.3, 0.6);
+        glVertex2f(0.3, 0.7);
+        glVertex2f(-0.3, 0.7);
+    glEnd();
+
+    // Pintu
+    glColor3f(0.3, 0.2, 0.1);
+    glBegin(GL_POLYGON);
+        glVertex2f(-0.05, -0.3);
+        glVertex2f(0.05, -0.3);
+        glVertex2f(0.05, -0.1);
+        glVertex2f(-0.05, -0.1);
+    glEnd();
+
+    // Jendela
+    glColor3f(0.9, 0.9, 1);
+    for (float y = -0.1; y < 0.5; y += 0.15) {
+        for (float x = -0.22; x < 0.22; x += 0.1) {
+            glBegin(GL_POLYGON);
+                glVertex2f(x, y);
+                glVertex2f(x + 0.06, y);
+                glVertex2f(x + 0.06, y + 0.08);
+                glVertex2f(x, y + 0.08);
+            glEnd();
+        }
+    }
+
+    glColor3f(1,1,1);
+    tulisTeks(-0.25, 0.62, label);
+
+    glPopMatrix();
+}
+
+// ================= AWAN =================
+void awan() {
+    glColor3f(1,1,1);
+    lingkaran(-0.06, 0, 0.08);
+    lingkaran(0.06, 0, 0.08);
+    lingkaran(0, 0.05, 0.08);
+}
+
+// ================= LAMPU =================
+void lampu() {
+    // Tiang
+    glColor3f(0.3, 0.3, 0.3);
+    glBegin(GL_POLYGON);
+        glVertex2f(-0.01, -0.3);
+        glVertex2f(0.01, -0.3);
+        glVertex2f(0.01, 0.3);
+        glVertex2f(-0.01, 0.3);
+    glEnd();
+
+    // Lampu
+    glColor3f(1, 1, 0.6);
+    lingkaran(0, 0.35, 0.04);
+}
+
+// ================= TRUCK =================
+void truck() {
+    glPushMatrix();
+
+    // Bak belakang
+    glColor3f(0.85, 0.4, 0.1);
+    glBegin(GL_POLYGON);
+        glVertex2f(-0.35, 0.05);
+        glVertex2f(0.05, 0.05);
+        glVertex2f(0.05, 0.28);
+        glVertex2f(-0.35, 0.28);
+    glEnd();
+
+    // Garis detail bak
+    glColor3f(0.6, 0.3, 0.1);
+    for(float y = 0.08; y < 0.25; y += 0.05){
+        glBegin(GL_LINES);
+            glVertex2f(-0.35, y);
+            glVertex2f(0.05, y);
+        glEnd();
+    }
+
+    // Kepala truck (lebih miring)
+    glColor3f(0.7, 0.7, 0.7);
+    glBegin(GL_POLYGON);
+        glVertex2f(0.05, 0.05);
+        glVertex2f(0.22, 0.05);
+        glVertex2f(0.2, 0.25);
+        glVertex2f(0.05, 0.25);
+    glEnd();
+
+    // Kaca
+    glColor3f(0.7, 0.9, 1);
+    glBegin(GL_POLYGON);
+        glVertex2f(0.08, 0.12);
+        glVertex2f(0.18, 0.12);
+        glVertex2f(0.17, 0.22);
+        glVertex2f(0.08, 0.22);
+    glEnd();
+
+    // Lampu depan
+    glColor3f(1, 1, 0.6);
+    lingkaran(0.22, 0.08, 0.015);
+
+    // Roda
+    glColor3f(0, 0, 0);
+    lingkaran(-0.2, 0, 0.06);
+    lingkaran(0.1, 0, 0.06);
+
+    // Velg
+    glColor3f(0.7, 0.7, 0.7);
+    lingkaran(-0.2, 0, 0.025);
+    lingkaran(0.1, 0, 0.025);
+
+    glPopMatrix();
+}
+
+// ================= MOBIL =================
+void mobil(float r, float g, float b) {
+    glPushMatrix();
+
+    // Body bawah
+    glColor3f(r, g, b);
+    glBegin(GL_POLYGON);
+        glVertex2f(-0.18, 0);
+        glVertex2f(0.18, 0);
+        glVertex2f(0.2, 0.08);
+        glVertex2f(-0.2, 0.08);
+    glEnd();
+
+    // Body atas (lebih landai)
+    glBegin(GL_POLYGON);
+        glVertex2f(-0.12, 0.08);
+        glVertex2f(0.12, 0.08);
+        glVertex2f(0.08, 0.18);
+        glVertex2f(-0.08, 0.18);
+    glEnd();
+
+    // Kaca depan & belakang
+    glColor3f(0.7, 0.9, 1);
+    glBegin(GL_POLYGON);
+        glVertex2f(-0.1, 0.09);
+        glVertex2f(0.1, 0.09);
+        glVertex2f(0.07, 0.16);
+        glVertex2f(-0.07, 0.16);
+    glEnd();
+
+    // Lampu depan
+    glColor3f(1, 1, 0.6);
+    lingkaran(0.19, 0.04, 0.015);
+
+    // Lampu belakang
+    glColor3f(1, 0, 0);
+    lingkaran(-0.19, 0.04, 0.015);
+
+    // Roda luar
+    glColor3f(0, 0, 0);
+    lingkaran(-0.1, -0.02, 0.045);
+    lingkaran(0.1, -0.02, 0.045);
+
+    // Velg (dalam roda)
+    glColor3f(0.7, 0.7, 0.7);
+    lingkaran(-0.1, -0.02, 0.02);
+    lingkaran(0.1, -0.02, 0.02);
+
+    glPopMatrix();
+}
+// ================= DISPLAY =================
+void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // --- STACK 1: LANGIT (FULL BACKGROUND) --- [cite: 12, 70]
-    glPushMatrix();
-        glBegin(GL_QUADS);
-            glColor3f(0.7f, 0.8f, 1.0f); // Biru Langit Cerah
-            glVertex2f(-1.0f, 1.0f);
-            glVertex2f(1.0f, 1.0f);
-            glColor3f(0.9f, 0.95f, 1.0f); // Gradasi ke arah bawah
-            glVertex2f(1.0f, 0.0f);
-            glVertex2f(-1.0f, 0.0f);
-        glEnd();
-    glPopMatrix();
+    // Langit
+    glBegin(GL_POLYGON);
+        glColor3f(0.2, 0.6, 1.0); glVertex2f(-1, 1);
+        glColor3f(0.5, 0.8, 1.0); glVertex2f(1, -0.3);
+        glVertex2f(1, 1);
+        glVertex2f(-1, -0.3);
+    glEnd();
 
-    // --- STACK 2: AWAN --- [cite: 137]
-    glPushMatrix();
-        glColor3f(1.0f, 1.0f, 1.0f);
-        // Awan Kiri
-        drawCircle(-0.7f, 0.75f, 0.1f); drawCircle(-0.6f, 0.75f, 0.12f); drawCircle(-0.5f, 0.75f, 0.1f);
-        // Awan Kanan
-        drawCircle(0.5f, 0.85f, 0.08f); drawCircle(0.6f, 0.85f, 0.1f); drawCircle(0.7f, 0.85f, 0.08f);
-    glPopMatrix();
+    // Matahari
+    glColor3f(1, 0.9, 0);
+    lingkaran(0.75, 0.75, 0.2);
 
-    // --- STACK 3: LAUT & TEBING (BACKGROUND TENGAH) --- [cite: 12, 137]
-    glPushMatrix();
-        // Laut
-        glBegin(GL_QUADS);
-            glColor3f(0.4f, 0.5f, 0.9f);
-            glVertex2f(-1.0f, 0.0f); glVertex2f(1.0f, 0.0f);
-            glVertex2f(1.0f, -0.2f); glVertex2f(-1.0f, -0.2f);
-        glEnd();
-        // Tebing Cokelat
-        glColor3f(0.3f, 0.2f, 0.15f);
+    // Awan
+    glPushMatrix(); glTranslatef(-0.6, 0.8, 0); awan(); glPopMatrix();
+    glPushMatrix(); glTranslatef(0.1, 0.85, 0); awan(); glPopMatrix();
+    glPushMatrix(); glTranslatef(0.5, 0.75, 0); awan(); glPopMatrix();
+
+    // Gedung
+    gedung(-0.5, 0.5, 0.5, 0.5, "Badan Gizi Nasional");
+    gedung(0.4, 0.4, 0.5, 0.4, "DPR RI");
+
+    // Pohon
+    for(float x=-0.9; x<=0.9; x+=0.3){
+        glPushMatrix();
+        glTranslatef(x, -0.3, 0);
+        pohon();
+        glPopMatrix();
+    }
+
+    // Lampu
+    for(float x=-0.8; x<=0.8; x+=0.5){
+        glPushMatrix();
+        glTranslatef(x, 0, 0);
+        lampu();
+        glPopMatrix();
+    }
+
+    // Jalan
+    glColor3f(0.2,0.2,0.2);
+    glBegin(GL_POLYGON);
+        glVertex2f(-1,-1);
+        glVertex2f(1,-1);
+        glVertex2f(1,-0.3);
+        glVertex2f(-1,-0.3);
+    glEnd();
+
+    // Garis jalan
+    glColor3f(1,1,1);
+    for(float x=-0.9; x<1; x+=0.4){
         glBegin(GL_POLYGON);
-            glVertex2f(0.6f, -0.2f); glVertex2f(1.0f, -0.2f);
-            glVertex2f(1.0f, 0.1f); glVertex2f(0.8f, 0.05f);
+            glVertex2f(x,-0.62);
+            glVertex2f(x+0.15,-0.62);
+            glVertex2f(x+0.15,-0.58);
+            glVertex2f(x,-0.58);
         glEnd();
-    glPopMatrix();
+    }
 
-    // --- STACK 4: PADANG RUMPUT (GROUND) --- 
-    glPushMatrix();
-        glBegin(GL_QUADS);
-            glColor3f(0.2f, 0.6f, 0.2f); // Hijau Tua
-            glVertex2f(-1.0f, -0.2f); glVertex2f(1.0f, -0.2f);
-            glColor3f(0.4f, 0.8f, 0.3f); // Hijau Muda
-            glVertex2f(1.0f, -1.0f); glVertex2f(-1.0f, -1.0f);
-        glEnd();
-    glPopMatrix();
-
-    // --- STACK 5: MOBIL VAN (OBJEK UTAMA) --- [cite: 16, 137, 138]
-    glPushMatrix();
-        glTranslatef(-0.1f, -0.3f, 0.0f); // Mengatur posisi mobil di tanah
-        
-        // Badan Bawah Van
-        glColor3f(0.0f, 0.6f, 0.9f); // Biru Terang
-        glRectf(-0.6f, -0.3f, 0.6f, 0.15f);
-        
-        // Atap Putih Van
-        glColor3f(0.95f, 0.95f, 0.95f);
-        glBegin(GL_POLYGON);
-            glVertex2f(-0.58f, 0.15f); glVertex2f(0.58f, 0.15f);
-            glVertex2f(0.55f, 0.3f); glVertex2f(-0.55f, 0.3f);
-        glEnd();
-
-        // Jendela-jendela (Dibuat smooth)
-        glColor3f(0.8f, 0.9f, 1.0f);
-        glRectf(-0.5f, 0.0f, -0.15f, 0.2f); // Jendela belakang
-        glRectf(-0.1f, 0.0f, 0.25f, 0.2f);  // Jendela tengah
-        glBegin(GL_POLYGON); // Jendela Depan (Melengkung)
-            glVertex2f(0.3f, 0.0f); glVertex2f(0.55f, 0.0f);
-            glVertex2f(0.52f, 0.2f); glVertex2f(0.3f, 0.2f);
-        glEnd();
-
-        // Roda (Dibuat sangat halus/smooth)
-        glColor3f(0.1f, 0.1f, 0.1f);
-        drawCircle(-0.35f, -0.3f, 0.14f, 100); // Roda Belakang
-        drawCircle(0.35f, -0.3f, 0.14f, 100);  // Roda Depan
-        
-        // Velg
-        glColor3f(0.4f, 0.4f, 0.4f);
-        drawCircle(-0.35f, -0.3f, 0.06f, 50);
-        drawCircle(0.35f, -0.3f, 0.06f, 50);
-    glPopMatrix();
+    // Kendaraan
+    glPushMatrix(); glTranslatef(-0.4, -0.7, 0); truck(); glPopMatrix();
+    glPushMatrix(); glTranslatef(0.3, -0.85, 0); mobil(1,0,0); glPopMatrix();
+    glPushMatrix(); glTranslatef(0.7, -0.75, 0); mobil(0,0.1,0.8); glPopMatrix();
 
     glFlush();
 }
 
+// ================= INIT =================
+void init() {
+    glClearColor(0.2, 0.6, 1, 1);
+    gluOrtho2D(-1,1,-1,1);
+}
+
+// ================= MAIN =================
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    glutInitWindowSize(800, 600);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
-    glutCreateWindow("Full Landscape Van 2D - Smooth Version");
-    
-    glutDisplayFunc(RenderScene);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(1000,700);
+    glutCreateWindow("Lanskap Kota Final");
+    init();
+    glutDisplayFunc(display);
     glutMainLoop();
-    return 0;
 }

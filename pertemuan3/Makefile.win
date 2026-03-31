@@ -1,15 +1,15 @@
-# Project: Project1
+# Project: Project3
 # Makefile created by Dev-C++ 5.7.1
 
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = proyeksi.o
-LINKOBJ  = proyeksi.o
+OBJ      = lengan_bergerak.o
+LINKOBJ  = lengan_bergerak.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW32/mingw32/lib" -static-libstdc++ -static-libgcc -mwindows -lglut32 -lglu32 -lopengl32 -lwinmm -lgdi32
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include/c++"
-BIN      = Project1.exe
+BIN      = Project3.exe
 CXXFLAGS = $(CXXINCS) 
 CFLAGS   = $(INCS) -DGLUT_STATIC
 RM       = rm.exe -f
@@ -24,5 +24,5 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
 
-proyeksi.o: proyeksi.cpp
-	$(CPP) -c proyeksi.cpp -o proyeksi.o $(CXXFLAGS)
+lengan_bergerak.o: lengan_bergerak.cpp
+	$(CPP) -c lengan_bergerak.cpp -o lengan_bergerak.o $(CXXFLAGS)
